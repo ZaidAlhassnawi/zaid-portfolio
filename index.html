@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Portfolio of Zaid Hani Alhasnawi, .NET software developer and Computer Science student." />
+    <meta name="color-scheme" content="dark" />
+    <title>Zaid Hani Alhasnawi | Software Developer</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+
+    <header class="site-header">
+      <a class="brand" href="#home" aria-label="Homepage"><span>ZH</span> Zaid Hani</a>
+      <button class="menu-button" type="button" aria-label="Toggle navigation" aria-expanded="false">Menu</button>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="#projects">Projects</a>
+        <a href="#experience">Experience</a>
+        <a href="#certificates">Certificates</a>
+        <a class="nav-cta" href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main id="main-content">
+      <section class="hero section" id="home">
+        <div class="hero-copy">
+          <p class="eyebrow">.NET SOFTWARE DEVELOPER</p>
+          <h1 id="hero-name">Zaid Hani<br /><span>Alhasnawi.</span></h1>
+          <p class="hero-lead" id="hero-headline">I build maintainable desktop and database-backed business applications.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#projects">Explore my work</a>
+            <a class="button button-secondary" id="hero-email" href="#contact">Contact me</a>
+          </div>
+        </div>
+        <aside class="terminal-card" aria-label="Developer profile summary">
+          <div class="terminal-top"><i></i><i></i><i></i><span>profile.cs</span></div>
+          <pre><code><span class="code-key">developer</span> = {
+  <span class="code-prop">name</span>: <span class="code-value">"Zaid Hani"</span>,
+  <span class="code-prop">focus</span>: [<span class="code-value">".NET"</span>, <span class="code-value">"Desktop"</span>],
+  <span class="code-prop">database</span>: <span class="code-value">"SQL Server"</span>,
+  <span class="code-prop">location</span>: <span class="code-value">"Karbala, Iraq"</span>,
+  <span class="code-prop">available</span>: <span class="code-bool">true</span>
+};</code></pre>
+        </aside>
+      </section>
+
+      <div class="status-banner" id="configuration-message" hidden></div>
+
+      <section class="section split-section" id="about">
+        <div>
+          <p class="section-index">01 / ABOUT</p>
+          <h2>Software shaped by real operational needs.</h2>
+        </div>
+        <div>
+          <p class="large-copy" id="about-copy">Computer Science student and .NET software developer experienced in building desktop and database-backed applications for real administrative workflows.</p>
+          <div class="metrics" id="profile-metrics">
+            <div><strong id="projects-count">-</strong><span>Projects</span></div>
+            <div><strong id="skills-count">-</strong><span>Skills</span></div>
+            <div><strong id="certificates-count">-</strong><span>Certificates</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="skills">
+        <div class="section-heading">
+          <div><p class="section-index">02 / SKILLS</p><h2>Technical toolkit</h2></div>
+          <p>Technologies used across desktop, database, API and web projects.</p>
+        </div>
+        <div class="skill-groups" id="skills-container" aria-live="polite"><div class="loading-card">Loading skills...</div></div>
+      </section>
+
+      <section class="section" id="projects">
+        <div class="section-heading">
+          <div><p class="section-index">03 / SELECTED WORK</p><h2>Projects with context</h2></div>
+          <p>Professional, personal and educational systems presented with honest roles and scope.</p>
+        </div>
+        <div class="project-grid" id="projects-container" aria-live="polite"><div class="loading-card">Loading projects...</div></div>
+      </section>
+
+      <section class="section" id="experience">
+        <div class="section-heading"><div><p class="section-index">04 / JOURNEY</p><h2>Experience & education</h2></div></div>
+        <div class="timeline-columns">
+          <div><h3>Experience</h3><div class="timeline" id="experience-container"><div class="loading-card">Loading experience...</div></div></div>
+          <div><h3>Education</h3><div class="timeline" id="education-container"><div class="loading-card">Loading education...</div></div></div>
+        </div>
+      </section>
+
+      <section class="section" id="certificates">
+        <div class="section-heading">
+          <div><p class="section-index">05 / LEARNING</p><h2>Certificates</h2></div>
+          <button class="text-button" id="toggle-certificates" type="button">Show all</button>
+        </div>
+        <div class="certificate-grid" id="certificates-container" aria-live="polite"><div class="loading-card">Loading certificates...</div></div>
+      </section>
+
+      <section class="section contact-section" id="contact">
+        <p class="section-index">06 / CONTACT</p>
+        <h2>Let’s build something useful.</h2>
+        <p>Open to software development opportunities, collaboration and professional conversations.</p>
+        <div class="contact-links" id="contact-links"><a class="button button-primary" id="contact-email" href="#">Email me</a></div>
+      </section>
+    </main>
+
+    <footer><span>© <span id="year"></span> Zaid Hani Alhasnawi</span><a href="admin/login.html">Admin</a></footer>
+    <script type="module" src="assets/js/portfolio.js"></script>
+  </body>
+</html>

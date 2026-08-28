@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>Admin Login | Zaid Portfolio</title>
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../assets/css/admin.css" />
+  </head>
+  <body class="auth-page">
+    <main class="auth-card">
+      <a class="admin-brand" href="../index.html"><span>ZH</span> Portfolio</a>
+      <p class="eyebrow">SECURE ADMIN AREA</p>
+      <h1>Welcome back</h1>
+      <p class="muted">Sign in with the single administrator account configured in Supabase Auth.</p>
+      <div class="notice error" id="configuration-error" hidden></div>
+      <form id="login-form">
+        <label>Email<input id="email" type="email" autocomplete="username" required /></label>
+        <label>Password<input id="password" type="password" autocomplete="current-password" minlength="8" required /></label>
+        <button class="primary-button" type="submit">Sign in</button>
+      </form>
+      <p class="form-message" id="login-message" role="status"></p>
+      <!-- <a class="back-link" href="reset-password.html">Forgot your password?</a><br /> -->
+      <a class="back-link" href="../index.html">← Return to portfolio</a>
+    </main>
+    <script type="module" src="../assets/js/login.js"></script>
+  </body>
+</html>
