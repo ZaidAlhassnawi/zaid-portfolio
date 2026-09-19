@@ -1,23 +1,27 @@
 # Zaid Hani Alhasnawi - Dynamic Portfolio
 
-نسخة مستقلة من Portfolio احترافي متصل بـ Supabase، وتتضمن:
+A standalone, professional portfolio website integrated with **Supabase**, designed to provide a dynamic public portfolio and a secure administration dashboard.
 
-- واجهة عامة باللغة الإنجليزية ومتجاوبة مع الهاتف.
-- تحميل الملف الشخصي والمهارات والمشاريع والخبرة والتعليم والشهادات وروابط التواصل من قاعدة البيانات.
-- تسجيل دخول المدير بواسطة Supabase Auth.
-- استعادة كلمة مرور المدير عبر البريد من دون حذف الحساب.
-- لوحة لإضافة وتعديل وحذف المشاريع والمهارات والشهادات.
-- ربط المهارات بالمشاريع.
-- رفع ملفات الشهادات إلى Supabase Storage من صفحة الإضافة.
-- جاهزية للنشر على GitHub Pages.
+The project includes:
 
-## 1. إعداد الاتصال
+* A fully responsive public interface in English.
+* Dynamic loading of profile information, skills, projects, work experience, education, certificates, and social links from the database.
+* Secure administrator authentication using Supabase Auth.
+* Password recovery through email without deleting or recreating the administrator account.
+* An administration dashboard for creating, updating, and deleting projects, skills, and certificates.
+* The ability to associate skills with projects.
+* Certificate file uploads directly to Supabase Storage.
+* Ready-to-deploy configuration for GitHub Pages.
 
-افتح الملف:
+---
+
+## 1. Supabase Connection Setup
+
+Open the following file:
 
 `assets/js/config.js`
 
-ثم ضع Project URL ومفتاح `Publishable key` أو `anon key`:
+Then add your Supabase **Project URL** and either the **Publishable Key** or **anon key**:
 
 ```js
 export const SUPABASE_CONFIG = Object.freeze({
@@ -27,109 +31,232 @@ export const SUPABASE_CONFIG = Object.freeze({
 });
 ```
 
-استخدم المفتاح العام فقط. لا تستخدم مطلقًا:
+Use only the public client key.
 
-- `service_role`
-- كلمة مرور PostgreSQL
-- Connection string
+Never include any of the following in the project:
 
-وجود المفتاح العام في مستودع GitHub أمر طبيعي؛ الحماية تعتمد على RLS وليس على إخفاء هذا المفتاح.
+* `service_role` key
+* PostgreSQL database password
+* Database connection string
 
-## 2. التشغيل على الجهاز
+It is normal for the public Supabase key to be visible in a GitHub repository.
 
-لا تفتح `index.html` بالنقر المزدوج لأن ملفات JavaScript تستخدم ES Modules. شغّل خادمًا محليًا بإحدى الطريقتين:
+Application security must rely on properly configured **Row Level Security (RLS)** policies rather than attempting to hide the public client key.
 
-### VS Code
+---
 
-ثبّت إضافة Live Server، ثم اضغط بزر الفأرة الأيمن على `index.html` واختر `Open with Live Server`.
+## 2. Running the Project Locally
 
-### Python
+Do not open `index.html` directly by double-clicking it because the project uses JavaScript **ES Modules**.
 
-من داخل مجلد المشروع:
+Instead, run the project through a local web server.
+
+### Using VS Code
+
+Install the **Live Server** extension.
+
+Then right-click:
+
+`index.html`
+
+and select:
+
+`Open with Live Server`
+
+### Using Python
+
+From inside the project directory, run:
 
 ```bash
 python -m http.server 5500
 ```
 
-ثم افتح:
+Then open:
 
-`http://localhost:5500`
+```text
+http://localhost:5500
+```
 
-لوحة الإدارة:
+Administrator login page:
 
-`http://localhost:5500/admin/login.html`
+```text
+http://localhost:5500/admin/login.html
+```
 
-استعادة كلمة المرور:
+Password recovery page:
 
-`http://localhost:5500/admin/reset-password.html`
+```text
+http://localhost:5500/admin/reset-password.html
+```
 
-## 3. الحماية المطلوبة في Supabase
+---
 
-قبل النشر تأكد من الآتي:
+## 3. Required Supabase Security Configuration
 
-1. تعطيل Public Sign-ups في Supabase Auth.
-2. وجود حساب مدير واحد فقط.
-3. تفعيل RLS على كل الجداول العامة.
-4. السماح للزوار بعملية `SELECT` على الصفوف المرئية فقط.
-5. السماح بـ `INSERT / UPDATE / DELETE` للمستخدم المسجل والمصرح له فقط.
-6. بقاء bucket باسم `portfolio-assets` عامًا للقراءة فقط.
-7. اقتصار الرفع والتعديل والحذف في Storage على مسار يبدأ بـ User ID الخاص بالمستخدم.
-8. عدم وضع `service_role` أو Database Password في المشروع أو GitHub.
+Before deploying the portfolio, make sure the following security measures are configured correctly:
 
-يمكن تشغيل `sql/security-audit.sql` في SQL Editor لفحص RLS والسياسات دون تغيير البيانات.
+1. Disable public sign-ups in Supabase Auth.
+2. Maintain only the intended administrator account.
+3. Enable Row Level Security on all public tables.
+4. Allow public visitors to perform `SELECT` operations only on records intended to be publicly visible.
+5. Allow `INSERT`, `UPDATE`, and `DELETE` operations only for authenticated and authorized users.
+6. Keep the `portfolio-assets` Storage bucket publicly readable only where required.
+7. Restrict Storage upload, update, and delete operations to paths beginning with the authenticated user's User ID.
+8. Never include the `service_role` key, database password, or database connection string in the project files or GitHub repository.
 
-## 4. طريقة عمل لوحة الإدارة
+The following script can be executed from the Supabase SQL Editor:
 
-- `admin/login.html`: يرسل البريد وكلمة المرور مباشرة إلى Supabase Auth عبر HTTPS.
-- Supabase يعيد جلسة قصيرة الأجل ويجددها تلقائيًا.
-- `admin/dashboard.html`: يتحقق من وجود الجلسة قبل عرض البيانات.
-- `admin/reset-password.html`: يرسل رابط الاستعادة ويتيح تعيين كلمة مرور جديدة بعد التحقق من الرابط.
-- كل عملية تعديل تصل إلى Supabase وتخضع لسياسات RLS مرة أخرى.
-- إخفاء رابط لوحة الإدارة ليس وسيلة حماية؛ RLS هي حاجز الحماية الحقيقي.
+```text
+sql/security-audit.sql
+```
 
-## 5. رفع شهادة
+It performs a read-only audit of the current RLS configuration and security policies without modifying application data.
 
-من Dashboard اختر Certificates ثم Add certificate. عند اختيار ملف:
+---
 
-- يقبل JPEG وPNG وWEBP وPDF فقط.
-- الحد الأقصى 5 MB.
-- يُرفع إلى المسار:
+## 4. How the Administration Dashboard Works
+
+### `admin/login.html`
+
+The login page sends the administrator's email address and password directly to Supabase Auth over HTTPS.
+
+Supabase then creates an authenticated session and automatically handles session renewal.
+
+### `admin/dashboard.html`
+
+Before displaying administration data, the dashboard verifies that a valid authenticated session exists.
+
+All database modification requests are sent to Supabase and are independently validated again by the configured RLS policies.
+
+### `admin/reset-password.html`
+
+The password recovery page allows the administrator to request a password reset email.
+
+After the recovery link has been verified, the administrator can securely define a new password without deleting the existing account.
+
+Hiding the administration dashboard URL is not considered a security mechanism.
+
+The actual security boundary is provided by **Supabase Auth, Row Level Security policies, and Storage policies**.
+
+---
+
+## 5. Uploading Certificates
+
+From the Dashboard, navigate to:
+
+`Certificates → Add Certificate`
+
+When a file is selected:
+
+* Supported formats are:
+
+  * JPEG
+  * PNG
+  * WEBP
+  * PDF
+* Maximum file size: **5 MB**
+* The file is uploaded to the following Storage path:
 
 ```text
 USER_ID/certificates/unique-file-name.pdf
 ```
 
-- يُحفظ المسار في `certificates.image_path`.
-
-## 6. النشر على GitHub Pages
-
-1. أنشئ Repository جديدًا مثل `zaid-portfolio`.
-2. ارفع محتويات هذا المجلد إلى الفرع `main`.
-3. افتح Settings ثم Pages.
-4. اختر `Deploy from a branch`.
-5. اختر `main` والمجلد `/root`.
-6. احفظ وانتظر ظهور رابط الموقع.
-
-بعدها أضف رابط GitHub Pages إلى Supabase ضمن إعدادات Auth المسموح بها إذا استخدمت روابط إعادة توجيه مستقبلًا. تسجيل الدخول بالبريد وكلمة المرور في النسخة الحالية لا يحتاج Redirect خارجيًا.
-
-## 7. الملفات الأساسية
+The resulting Storage path is saved in:
 
 ```text
-index.html                    الواجهة العامة
-admin/login.html              تسجيل دخول المدير
-admin/dashboard.html          لوحة الإدارة
-admin/reset-password.html     طلب الاستعادة وتعيين كلمة مرور جديدة
-assets/js/config.js           إعدادات الاتصال العامة
-assets/js/supabase-client.js  إنشاء عميل Supabase
-assets/js/portfolio.js        قراءة وعرض البيانات العامة
-assets/js/login.js            تسجيل الدخول
-assets/js/reset-password.js   استعادة كلمة المرور
-assets/js/dashboard.js        CRUD ورفع الشهادات
-assets/css/main.css           تصميم الموقع العام
-assets/css/admin.css          تصميم لوحة الإدارة
-sql/security-audit.sql        تدقيق أمان للقراءة فقط
+certificates.image_path
 ```
 
-## ملاحظة مهمة
+This approach keeps certificate files organized under the authenticated administrator's Storage namespace.
 
-لوحة الإدارة الحالية تدير العناصر المطلوبة: Projects وSkills وCertificates. بقية أقسام الملف الشخصي تُقرأ من قاعدة البيانات، ويمكن إضافة نماذج إدارتها لاحقًا بنفس النمط.
+---
+
+## 6. Deploying to GitHub Pages
+
+To deploy the portfolio using GitHub Pages:
+
+1. Create a new GitHub repository, for example:
+
+   `zaid-portfolio`
+
+2. Upload the contents of this project directory to the `main` branch.
+
+3. Open the repository's:
+
+   `Settings → Pages`
+
+4. Under the deployment source, select:
+
+   `Deploy from a branch`
+
+5. Select:
+
+   * Branch: `main`
+   * Folder: `/root`
+
+6. Save the configuration.
+
+GitHub Pages will generate a public URL for the portfolio.
+
+If future authentication features require external redirects, add the GitHub Pages URL to the allowed redirect URLs in the Supabase Auth configuration.
+
+The current email-and-password login flow does not require an external redirect URL.
+
+---
+
+## 7. Main Project Files
+
+```text
+index.html
+    Public portfolio interface
+
+admin/login.html
+    Administrator login page
+
+admin/dashboard.html
+    Administration dashboard
+
+admin/reset-password.html
+    Password recovery and password update page
+
+assets/js/config.js
+    Public Supabase connection configuration
+
+assets/js/supabase-client.js
+    Supabase client initialization
+
+assets/js/portfolio.js
+    Loads and renders public portfolio data
+
+assets/js/login.js
+    Handles administrator authentication
+
+assets/js/reset-password.js
+    Handles password recovery and password updates
+
+assets/js/dashboard.js
+    Handles CRUD operations and certificate uploads
+
+assets/css/main.css
+    Public portfolio styling
+
+assets/css/admin.css
+    Administration dashboard styling
+
+sql/security-audit.sql
+    Read-only Supabase security audit script
+```
+
+---
+
+## Important Note
+
+The current administration dashboard manages the following portfolio sections:
+
+* Projects
+* Skills
+* Certificates
+
+Other sections, including profile information, work experience, education, and additional portfolio content, are currently loaded directly from the Supabase database.
+
+Administration forms for these sections can be added later using the same architecture and CRUD pattern already implemented in the dashboard.
